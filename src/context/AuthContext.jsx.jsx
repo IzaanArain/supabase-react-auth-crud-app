@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { supabase } from "../lib/supabase";
-import { data } from "react-router";
 
 const AuthContext = createContext();
 
