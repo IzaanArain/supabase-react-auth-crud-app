@@ -31,7 +31,7 @@ export const AuthContextProvider = ({ children }) => {
     const signinUser =async ({ email, password } ) => {
         try {
             const { data, error } = await supabase.auth.signInWithPassword({
-                email:email,
+                email: email,
                 password: password
             });
 
@@ -48,14 +48,18 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        supabase.auth.getSession().then(({ data }) => {
-            setSession(data)
-        });
-
-        supabase.auth.onAuthStateChange((_event, session) => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session)
         })
-    }, []);
+
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session)
+        })
+
+        return () => subscription.unsubscribe()
+    }, [])
 
     // sign out
     const signOut = () => {
@@ -65,8 +69,26 @@ export const AuthContextProvider = ({ children }) => {
         }
     };
 
+    // Google OAuth signup with supabase
+    const signupWithGoogle = async () => {
+        try {
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'google'
+            });
+            if (error) {
+                console.error(`there was a problem google sign up: ${error}`);
+                return { success: false, error: error.message };
+            }
+
+            console.log("google sign-up success: ",data);
+            return { success: true, data };
+        } catch (error) {
+            console.error("an error occurred: ", error);
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ session, signUpNewUser, signOut, signinUser }}>
+        <AuthContext.Provider value={{ session, signUpNewUser, signOut, signinUser, signupWithGoogle }}>
             {children}
         </AuthContext.Provider>
     )
