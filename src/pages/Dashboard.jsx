@@ -1,3 +1,4 @@
+import TodoList from "../components/TodoList.jsx";
 import { useAuthContext } from "../context/AuthContext.jsx"
 import { useNavigate } from "react-router";
 
@@ -26,6 +27,7 @@ const Dashboard = () => {
           Sign out
         </p>
       </div>
+      <TodoList />
     </div>
   )
 }
