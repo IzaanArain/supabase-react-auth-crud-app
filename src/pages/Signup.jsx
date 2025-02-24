@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { useAuthContext } from "../context/AuthContext.jsx";
+import GoogleButton from "../components/GoogleButton.jsx";
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -52,6 +53,7 @@ const Signup = () => {
         <button type="submit" disabled={loading} className="mt-6 w-full">
           Sign up
         </button>
+        {/* <GoogleButton/> */}
         {error && <p className="text-red-600 text-center pt-4">{error}</p>}
       </div>
     </form>
